@@ -22,8 +22,6 @@ CREATE ROLE Technik
 
 COMMENT ON ROLE Technik IS 'Technický pracovník';
 
--- GRANT
-
 
 
 CREATE ROLE Developer
@@ -34,7 +32,6 @@ CREATE ROLE Developer
 
 COMMENT ON ROLE Developer IS 'Vývojář';
 
--- GRANT
 
 
 CREATE ROLE Analytik
@@ -47,3 +44,17 @@ CREATE ROLE Analytik
 COMMENT ON ROLE Analytik IS 'Osoba odpovědná za výsledky z dat';
 
 -- GRANT
+
+
+CREATE USER alice WITH ENCRYPTED PASSWORD '11111';
+CREATE USER donald WITH ENCRYPTED PASSWORD '22222';
+CREATE USER jelena WITH ENCRYPTED PASSWORD '33333';
+CREATE USER karlos WITH ENCRYPTED PASSWORD '44444';
+CREATE USER elis WITH ENCRYPTED PASSWORD '55555';
+
+CREATE GROUP dev_group WITH USER Alice, Donald;
+
+
+GRANT Administrator TO Jelena;
+GRANT Technik TO  Karlos;
+GRANT Analytik To Elis;
