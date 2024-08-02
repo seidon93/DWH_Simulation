@@ -1,0 +1,49 @@
+CREATE USER CDO
+   LOGIN SUPERUSER PASSWORD 'paswordcdo';
+
+
+CREATE ROLE Administrator
+    CREATEDB
+    NOINHERIT
+    REPLICATION;
+
+COMMENT ON ROLE Administrator IS 'Zástupce superuživatele';
+
+GRANT ALL PRIVILEGES ON DATABASE Crm TO Administrator WITH GRANT OPTION;
+
+
+CREATE ROLE Technik
+    NOSUPERUSER
+    CREATEDB
+    CREATEROLE
+    LOGIN PASSWORD 'Support'
+    REPLICATION
+    NOBYPASSRLS;
+
+COMMENT ON ROLE Technik IS 'Technický pracovník';
+
+-- GRANT
+
+
+
+CREATE ROLE Developer
+    NOCREATEROLE
+    NOBYPASSRLS
+    CREATEDB
+    LOGIN PASSWORD 'Devworker';
+
+COMMENT ON ROLE Developer IS 'Vývojář';
+
+-- GRANT
+
+
+CREATE ROLE Analytik
+    NOSUPERUSER
+    NOINHERIT
+    NOREPLICATION
+    NOBYPASSRLS
+    LOGIN PASSWORD 'datamaniak';
+
+COMMENT ON ROLE Analytik IS 'Osoba odpovědná za výsledky z dat';
+
+-- GRANT
