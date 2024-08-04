@@ -1,5 +1,5 @@
 CREATE USER CDO
-   LOGIN SUPERUSER PASSWORD 'paswordcdo';
+   LOGIN SUPERUSER ENCRYPTED PASSWORD 'paswordcdo';
 
 
 CREATE ROLE Administrator
@@ -43,8 +43,6 @@ CREATE ROLE Analytik
 
 COMMENT ON ROLE Analytik IS 'Osoba odpovědná za výsledky z dat';
 
--- GRANT
-
 
 CREATE USER alice WITH ENCRYPTED PASSWORD '11111';
 CREATE USER donald WITH ENCRYPTED PASSWORD '22222';
@@ -53,8 +51,12 @@ CREATE USER karlos WITH ENCRYPTED PASSWORD '44444';
 CREATE USER elis WITH ENCRYPTED PASSWORD '55555';
 
 CREATE GROUP dev_group WITH USER Alice, Donald;
-
+CREATE GROUP technical_group WITH ROLE Technik;
+CREATE GROUP analysis_group WITH ROLE  Analytik;
 
 GRANT Administrator TO Jelena;
 GRANT Technik TO  Karlos;
 GRANT Analytik To Elis;
+
+ALTER ROLE Cdo CREATEROLE;
+
