@@ -38,4 +38,3 @@ EXECUTE FUNCTION remove_finishes_activity();
 
 
 
-
