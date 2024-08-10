@@ -61,3 +61,28 @@ BEFORE INSERT OR UPDATE ON customers
 FOR EACH ROW
 EXECUTE FUNCTION verify_email();
 
+-- kopírování dat do kontaktní tabulky CONTACTS
+
+ALTER TABLE contacts
+ADD CONSTRAINT unique_email UNIQUE (email);
+
+CREATE UNIQUE INDEX unique_contact_index
+ON Contacts (first_name, last_name, email);
+
+CREATE OR REPLACE FUNCTION copy_to_contacts()
+RETURNS TRIGGER AS $$
+BEGIN
+    INSERT INTO contacts (first_name, last_name, email)
+    VALUES (NEW.first_name, NEW.last_name, NEW.email)
+    ON CONFLICT (first_name, last_name, email) DO NOTHING;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE TRIGGER informations_copy
+AFTER INSERT ON customers
+FOR EACH ROW
+EXECUTE FUNCTION copy_to_contacts();
+
+

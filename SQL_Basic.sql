@@ -13,5 +13,3 @@ CREATE TRIGGER insert_full_name
 BEFORE INSERT OR UPDATE ON Customers
 FOR EACH ROW
 EXECUTE FUNCTION create_full_name();
-
-
