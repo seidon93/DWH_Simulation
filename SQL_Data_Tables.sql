@@ -88,7 +88,3 @@ CREATE TABLE CRM.CASE (
             CHECK ( PRIORITY IN ('Low', 'Middle', 'High'))
 );
 
-
-
-
-
