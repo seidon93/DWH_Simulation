@@ -44,4 +44,12 @@ INSERT INTO Crm."Crm_system".customers
     (first_name, last_name, email, Company)
 VALUES ('Arnošt', 'Novák', 'novakarnost01@example.cz', TRUE);
 
-SELECT * FROM contacts
+SELECT * FROM contacts;
+
+
+INSERT INTO Crm."Crm_system".customers
+    (first_name, last_name, email, Company)
+VALUES
+    ('Adéla', 'Svoboda', 'AdelSvoboda@firma.cz', TRUE);
+
+

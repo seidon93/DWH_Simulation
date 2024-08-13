@@ -86,3 +86,32 @@ FOR EACH ROW
 EXECUTE FUNCTION copy_to_contacts();
 
 
+-- Auditování změn zákazníků
+
+CREATE OR REPLACE FUNCTION audit_customers()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF TG_OP = 'INSERT' THEN
+        INSERT INTO audit.audit_data (user_name, operation, new_value)
+        VALUES (current_user, 'INSERT', row_to_json(NEW)::JSON);
+        RETURN NEW;
+    ELSIF TG_OP = 'UPDATE' THEN
+        INSERT INTO audit.audit_data (user_name, operation, old_value, new_value)
+        VALUES (current_user, 'UPDATE', row_to_json(OLD)::JSON, row_to_json(NEW)::JSON);
+        RETURN NEW;
+    ELSIF TG_OP = 'DELETE' THEN
+        INSERT INTO audit.audit_data (user_name, operation, old_value)
+        VALUES (current_user, 'DELETE', row_to_json(OLD)::JSON);
+        RETURN OLD;
+    END IF;
+    RETURN NULL;
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE TRIGGER audit_customers_trigger
+AFTER INSERT OR UPDATE OR DELETE ON "Crm_system".customers
+FOR EACH ROW
+EXECUTE FUNCTION Audit.audit_customers();
+
+
