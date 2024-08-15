@@ -20,7 +20,7 @@ CREATE TABLE Crm_System.Customers (
     Full_Name   VARCHAR(255),
     Email       VARCHAR(255) NOT NULL,
     Phone_Nmb   INTEGER,
-    Company     BOOLEAN      NOT NULL
+    Company     VARCHAR(255)     NOT NULL
 );
 
 CREATE UNIQUE INDEX Customers_Uin

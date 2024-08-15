@@ -63,24 +63,27 @@ EXECUTE FUNCTION verify_email();
 ALTER TABLE contacts
 ADD CONSTRAINT unique_email UNIQUE (email);
 
-CREATE UNIQUE INDEX unique_contact_index
-ON Contacts (first_name, last_name, email);
+CREATE UNIQUE INDEX unique_contact_email
+ON Crm_System.Contacts (Email);
 
-CREATE OR REPLACE FUNCTION copy_to_contacts()
-RETURNS TRIGGER AS $$
+CREATE OR REPLACE FUNCTION Copy_To_Contacts() RETURNS trigger
+    LANGUAGE plpgsql
+AS
+$$
 BEGIN
-    INSERT INTO contacts (first_name, last_name, email)
-    VALUES (NEW.first_name, NEW.last_name, NEW.email)
-    ON CONFLICT (first_name, last_name, email) DO NOTHING;
+    INSERT INTO Crm_System.Contacts (Contact_Id, First_Name, Last_Name, Email)
+    VALUES (NEW.Customer_Id, NEW.First_Name, NEW.Last_Name, NEW.Email)
+    ON CONFLICT (Email) DO NOTHING;
     RETURN NEW;
 END;
-$$ LANGUAGE plpgsql;
+$$;
 
 
-CREATE TRIGGER informations_copy
-AFTER INSERT ON customers
-FOR EACH ROW
-EXECUTE FUNCTION copy_to_contacts();
+CREATE TRIGGER Copy_Info_To_Contacts
+    AFTER INSERT
+    ON Crm_System.Customers
+    FOR EACH ROW
+EXECUTE PROCEDURE Copy_To_Contacts();
 
 
 -- Auditování změn zákazníků
