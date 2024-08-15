@@ -3,7 +3,7 @@ CREATE DATABASE Crm;
 CREATE OR REPLACE FUNCTION create_full_name()
 RETURNS TRIGGER AS $$
 BEGIN
-    NEW.full_name = CONCAT(NEW.first_name, ' ', NEW.last_name);
+    NEW.full_name = concat(NEW.first_name, ' ', NEW.last_name);
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;

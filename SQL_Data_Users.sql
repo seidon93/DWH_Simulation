@@ -1,6 +1,7 @@
 CREATE USER CDO
    LOGIN SUPERUSER ENCRYPTED PASSWORD 'paswordcdo';
 
+SET search_path = "Users";
 
 CREATE ROLE Administrator
     CREATEDB

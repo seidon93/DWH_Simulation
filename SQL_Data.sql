@@ -1,15 +1,10 @@
-CREATE TEMP TABLE t_user (
+CREATE TABLE Users.t_user (
     user_ID SERIAL PRIMARY KEY,
     username VARCHAR(50),
     password VARCHAR(255),
     email VARCHAR(100),
     role VARCHAR(50)
 );
-
-COPY t_user (User_Id, Username, password, email, role)
-FROM 'C:\Users\###\Users.csv'
-DELIMITER ';'
-CSV HEADER;
 
 CREATE EXTENSION pgcrypto;
 
@@ -19,9 +14,9 @@ SELECT
     crypt(password, gen_salt('bf')),
     email,
     role
-FROM t_user;
+FROM T_User;
 
-SELECT  * FROM Users.Uzivatel;
+SELECT * FROM Users.Uzivatel;
 
 DROP TABLE T_User;
 
@@ -42,8 +37,8 @@ DECLARE
 BEGIN
     FOR r IN
         SELECT DISTINCT role
-        FROM users.uzivatel
-        JOIN pg_roles ON users.uzivatel.role = pg_roles.rolname
+        FROM Users.uzivatel
+        JOIN pg_roles ON Users.uzivatel.role = pg_roles.rolname
         WHERE pg_roles.rolname IS NOT NULL
     LOOP
         EXECUTE format('GRANT SELECT ON ALL TABLES IN SCHEMA users TO %I;', r.role);

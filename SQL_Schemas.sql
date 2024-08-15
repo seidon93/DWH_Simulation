@@ -1,3 +1,8 @@
+CREATE SCHEMA Crm_system;
+ALTER SCHEMA Crm_system OWNER TO CDO;
+
+set search_path = "Crm_system";
+
 COMMENT ON DATABASE Crm IS 'Odpovědná osoba je CDO';
 CREATE SCHEMA Users;
 ALTER DATABASE Crm OWNER TO Cdo;

@@ -1,97 +1,103 @@
 -- SCHEMA users (gov)
-CREATE TABLE IF NOT EXISTS Users.uzivatel (
-    user_ID SERIAL PRIMARY KEY ,
-    username VARCHAR(255),
-    password VARCHAR(255),
-    email VARCHAR(255),
-    role VARCHAR(50)
+CREATE TABLE IF NOT EXISTS Users.Uzivatel (
+    User_Id  SERIAL PRIMARY KEY,
+    Username VARCHAR(255),
+    Password VARCHAR(255),
+    Email    VARCHAR(255),
+    Role     VARCHAR(50)
 );
 
 -- SCHEMA CRM (all tables)
-GRANT CREATE, USAGE ON SCHEMA CRM TO ADMINISTRATOR, TECHNICAL_GROUP, DEV_GROUP;
+GRANT CREATE, USAGE ON SCHEMA Crm_System TO Administrator, Technical_Group, Dev_Group;
 
-GRANT USAGE ON SCHEMA CRM TO ANALYSIS_GROUP;
+GRANT USAGE ON SCHEMA Crm_System TO Analysis_Group;
 
 
-CREATE TABLE CRM.CUSTOMERS (
-    CUSTOMER_ID SERIAL,
-    FIRST_NAME  VARCHAR(255) NOT NULL,
-    LAST_NAME   VARCHAR(255) NOT NULL,
-    FULL_NAME   VARCHAR(255),
-    EMAIL       VARCHAR(255) NOT NULL,
-    PHONE_NMB   INTEGER,
-    COMPANY     BOOL         NOT NULL
+CREATE TABLE Crm_System.Customers (
+    Customer_Id SERIAL,
+    First_Name  VARCHAR(255) NOT NULL,
+    Last_Name   VARCHAR(255) NOT NULL,
+    Full_Name   VARCHAR(255),
+    Email       VARCHAR(255) NOT NULL,
+    Phone_Nmb   INTEGER,
+    Company     BOOLEAN      NOT NULL
 );
 
+CREATE UNIQUE INDEX Customers_Uin
+    ON Crm_System.Customers ( Customer_Id );
 
-CREATE UNIQUE INDEX CUSTOMERS_UIN
-    ON CRM.CUSTOMERS ( CUSTOMER_ID );
+ALTER TABLE Crm_System.Customers
+    ADD CONSTRAINT Customers_Pk
+        PRIMARY KEY ( Customer_Id );
 
-ALTER TABLE CRM.CUSTOMERS
-    ADD CONSTRAINT CUSTOMERS_PK
-        PRIMARY KEY ( CUSTOMER_ID );
-
-
-CREATE TABLE CRM.CONTACTS (
-    CONTACT_ID SERIAL
-        CONSTRAINT CONTACTS_PK PRIMARY KEY,
-    TITLE      VARCHAR(10),
-    FIRST_NAME VARCHAR(255) NOT NULL,
-    LAST_NAME  VARCHAR(255) NOT NULL,
-    FULL_NAME  VARCHAR(255),
-    EMAIL      VARCHAR(255) NOT NULL,
-    COMPANY_NAME VARCHAR(255)
+CREATE TABLE Crm_System.Contacts (
+    Contact_Id   SERIAL
+        CONSTRAINT Contacts_Pk PRIMARY KEY,
+    Title        VARCHAR(255),
+    First_Name   VARCHAR(255) NOT NULL,
+    Last_Name    VARCHAR(255) NOT NULL,
+    Full_Name    VARCHAR(255),
+    Email        VARCHAR(255) NOT NULL,
+    Company_Name VARCHAR(255)
 );
 
-
-CREATE TABLE CRM.CAMPAGIN (
-    CAMPAGIN_ID   SERIAL
-        CONSTRAINT CAMPAGIN_PK PRIMARY KEY,
-    CAMPAGIN_NAME VARCHAR(255),
-    START_DATE    DATE    NOT NULL,
-    END_DATE      DATE,
-    STATUS        VARCHAR(255),
-    BUDGET        INTEGER NOT NULL
+CREATE TABLE Crm_System.Campagin (
+    Campagin_Id   SERIAL
+        CONSTRAINT Campagin_Pk PRIMARY KEY,
+    Campagin_Name VARCHAR(255),
+    Start_Date    DATE    NOT NULL,
+    End_Date      DATE,
+    Status        VARCHAR(255),
+    Budget        INTEGER NOT NULL
 );
 
-
-CREATE TABLE ACTIVITY (
-    ACTIVITY_ID SERIAL
-        CONSTRAINT ACTIVITY_PK PRIMARY KEY,
-    CUSTOMER      INTEGER NOT NULL,
-    ACTIVITY_DATE DATE    NOT NULL,
-    OUTCOME       TEXT    NOT NULL,
-    TYPE          TEXT    NOT NULL
-        CONSTRAINT CHECK_ACTIVITY_TYPE
-            CHECK (TYPE IN ('Email', 'Phone', 'Meeting')),
-        CONSTRAINT CHECK_OUTCOME
-            CHECK (OUTCOME IN ('Successful', 'Unsuccessful', 'Other actions'))
+CREATE TABLE Crm_System.Activity (
+    Activity_Id   SERIAL
+        CONSTRAINT Activity_Pk PRIMARY KEY,
+    Customer      INTEGER NOT NULL,
+    Activity_Date DATE    NOT NULL,
+    Outcome       TEXT    NOT NULL,
+    Type          TEXT    NOT NULL
+        CONSTRAINT Check_Activity_Type
+            CHECK (Type IN ( 'Email', 'Phone', 'Meeting' )),
+    CONSTRAINT Check_Outcome
+        CHECK (Outcome IN ( 'Successful', 'Unsuccessful', 'Other actions' ))
 );
 
+CREATE TABLE Crm_System.Cust_Case (
 
-
-CREATE TABLE CRM.CASE (
-    CASE_ID     SERIAL
-        CONSTRAINT CASE_PK PRIMARY KEY,
-    CUSTOMER    INTEGER,
-    PROBLEM     VARCHAR(255) NOT NULL,
-    DESCRIPTION TEXT         NOT NULL,
-    STATUS      TEXT         NOT NULL,
-    PRIORITY    TEXT         NOT NULL,
-    CREATED     TIMESTAMP,
-    SOLVED      TIMESTAMP,
-        CONSTRAINT CHECK_STATUS
-            CHECK (STATUS IN ('Open', 'Closed', 'In the solution')),
-        CONSTRAINT CHECK_PRIORITY
-            CHECK ( PRIORITY IN ('Low', 'Middle', 'High'))
+    Case_Id     SERIAL
+        CONSTRAINT Case_Pk PRIMARY KEY,
+    Customer    INTEGER,
+    Problem     VARCHAR(255) NOT NULL,
+    Description TEXT         NOT NULL,
+    Status      VARCHAR(255) NOT NULL,
+    Priority    VARCHAR(255) NOT NULL,
+    Created     TIMESTAMP,
+    Solved      TIMESTAMP,
+    CONSTRAINT Check_Status
+        CHECK (Status IN ( 'Open', 'Closed', 'In the solution' )),
+    CONSTRAINT Check_Priority
+        CHECK (Priority IN ( 'Low', 'Middle', 'High' ))
 );
 /* AUDIT SCHEMA */
 
-CREATE TABLE AUDIT.AUDIT_DATA (
-    AUDIT_ID  SERIAL PRIMARY KEY ,
-    USER_NAME VARCHAR(50),
-    OPERATION VARCHAR(10),
-    OLD_VALUE JSON,
-    NEW_VALUE JSON,
-    CHANGE_TIME TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE Audit.Audit_Data (
+    Audit_Id    SERIAL PRIMARY KEY,
+    User_Name   VARCHAR(50),
+    Operation   VARCHAR(10),
+    Old_Value   Json,
+    New_Value   Json,
+    Change_Time TIMESTAMP DEFAULT current_timestamp
 );
+
+/* Fact table */
+
+CREATE TABLE Crm_Facts (
+    Activity  INT,
+    Campagin  INT,
+    Contacts  INT,
+    Cust_Case INT,
+    Customer  INT
+
+)
