@@ -19,7 +19,7 @@ CREATE OR REPLACE FUNCTION remove_finishes_activity()
 RETURNS TRIGGER AS $$
 BEGIN
     IF NEW.Outcome = 'Successful' THEN
-        DELETE FROM Crm.Crm_system.Activity WHERE ActivityID = NEW.ActivityID;
+        DELETE FROM Crm.Crm_system.Activity WHERE Activity_ID = NEW.Activity_ID;
     END IF;
     RETURN NEW;
 END;

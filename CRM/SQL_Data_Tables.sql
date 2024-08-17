@@ -37,8 +37,7 @@ CREATE TABLE Crm_System.Contacts (
     First_Name   VARCHAR(255) NOT NULL,
     Last_Name    VARCHAR(255) NOT NULL,
     Full_Name    VARCHAR(255),
-    Email        VARCHAR(255) NOT NULL,
-    Company_Name VARCHAR(255)
+    Email        VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE Crm_System.Campagin (
@@ -49,6 +48,8 @@ CREATE TABLE Crm_System.Campagin (
     End_Date      DATE,
     Status        VARCHAR(255),
     Budget        INTEGER NOT NULL
+    CONSTRAINT Check_Activity_Type
+        CHECK (Campagin.Status IN ( 'Starting', 'Pending', 'Ending' ))
 );
 
 CREATE TABLE Crm_System.Activity (
@@ -58,8 +59,8 @@ CREATE TABLE Crm_System.Activity (
     Activity_Date DATE    NOT NULL,
     Outcome       TEXT    NOT NULL,
     Type          TEXT    NOT NULL
-        CONSTRAINT Check_Activity_Type
-            CHECK (Type IN ( 'Email', 'Phone', 'Meeting' )),
+    CONSTRAINT Check_Activity_Type
+        CHECK (Type IN ( 'Email', 'Phone', 'Meeting' )),
     CONSTRAINT Check_Outcome
         CHECK (Outcome IN ( 'Successful', 'Unsuccessful', 'Other actions' ))
 );
@@ -80,6 +81,13 @@ CREATE TABLE Crm_System.Cust_Case (
     CONSTRAINT Check_Priority
         CHECK (Priority IN ( 'Low', 'Middle', 'High' ))
 );
+
+CREATE TABLE Crm_System.Cust_Campagin (
+    Customer_ID INT,
+    Campagin_ID INT
+);
+
+
 /* AUDIT SCHEMA */
 
 CREATE TABLE Audit.Audit_Data (
@@ -91,13 +99,4 @@ CREATE TABLE Audit.Audit_Data (
     Change_Time TIMESTAMP DEFAULT current_timestamp
 );
 
-/* Fact table */
 
-CREATE TABLE Crm_Facts (
-    Activity  INT,
-    Campagin  INT,
-    Contacts  INT,
-    Cust_Case INT,
-    Customer  INT
-
-)
